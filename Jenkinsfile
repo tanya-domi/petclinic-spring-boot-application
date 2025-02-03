@@ -4,33 +4,19 @@ pipeline {
   Java_Home = tool name: 'java-17', type: 'jdk'
   }
   stages {
-
-    stage('Build Artifact') {
-      steps {
-
-
-        withMaven(maven: 'maven') {
-        sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"
-        archive 'target/*.jar'
+      stage('Build Artifact') {
+            steps {
+              withMaven(maven: 'maven') {
+              sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"
+              archive 'target/*.jar'
+              }
+            }
        }
-    }
-}
-//       stage('snyk scan') {
-//                   steps {
-//                       snykSecurity(
-//                           snykInstallation: 'snyk@latest',
-//                           snykTokenId: 'snyk_api_token',
-//                           monitorProjectOnBuild: false,
-//                           failOnIssues: false,  // Use boolean for failOnIssues
-//                           additionalArguments: '--json-file-output=all-vulnerabilities.json'
-//                       )
-//                   }
-      }
-
+  }
       stage('Test Maven - JUnit') {
-        steps {
-          withMaven(maven: 'maven') {
-            sh "mvn test -Dcheckstyle.skip"
+            steps {
+              withMaven(maven: 'maven') {
+              sh "mvn test -Dcheckstyle.skip"
               }
             }
             post{
@@ -39,24 +25,23 @@ pipeline {
               }
             }
         }
-      stage('Sonarqube Analysis - SAST') {
-        steps {
-          withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
-            withMaven(maven: 'maven'){
-              sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip"
+       stage('Sonarqube Analysis - SAST') {
+            steps {
+                withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
+                withMaven(maven: 'maven'){
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip"
                 }
                 }
-            }
-      }
-      stage('Docker Image creation') {
-        steps {
-          withDockerRegistry(credentialsId: 'dockercred', url: '') {
-            sh "docker build -t petclinic_img ."
-	          sh "docker tag petclinic_img:latest tds81/images:petclinic_img"
-            sh "docker push tds81/images:petclinic_img"
-            sh "docker run -d -p 8080:8080 petclinic_img"
+              }
+        }
+        stage('Docker Image creation') {
+            steps {
+              withDockerRegistry(credentialsId: 'dockercred', url: '') {
+              sh "docker build -t petclinic_img ."
+	      sh "docker tag petclinic_img:latest tds81/images:petclinic_img"
+              sh "docker push tds81/images:petclinic_img"
+                sh "docker run -d -p 8080:8080 petclinic_img"
               }
             }
        }
      }
-
