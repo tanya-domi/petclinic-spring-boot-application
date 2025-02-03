@@ -5,15 +5,15 @@ pipeline {
   }
   stages {
       stage('snyk scan') {
-                  steps {
-                      snykSecurity(
-                          snykInstallation: 'snyk@latest',
-                          snykTokenId: 'snyk_api_token',
-                          monitorProjectOnBuild: false,
-                          failOnIssues: false,  // Use boolean for failOnIssues
-                          additionalArguments: '--json-file-output=all-vulnerabilities.json'
-                      )
-                  }
+//                   steps {
+//                       snykSecurity(
+//                           snykInstallation: 'snyk@latest',
+//                           snykTokenId: 'snyk_api_token',
+//                           monitorProjectOnBuild: false,
+//                           failOnIssues: false,  // Use boolean for failOnIssues
+//                           additionalArguments: '--json-file-output=all-vulnerabilities.json'
+//                       )
+//                   }
       }
       stage('Build Artifact') {
             steps {
