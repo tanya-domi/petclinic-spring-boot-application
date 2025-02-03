@@ -4,6 +4,17 @@ pipeline {
   Java_Home = tool name: 'java-17', type: 'jdk'
   }
   stages {
+      stage('Snyk Test using plugin') {
+            steps {
+                snykSecurity(
+                    snykInstallation: 'snyk@latest',
+                    snykTokenId: 'snyk_api_token',
+                    monitorProjectOnBuild: false,
+                    failOnIssues: 'false',
+                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
+                )
+            }
+      }
       stage('Build Artifact') {
             steps {
               withMaven(maven: 'maven') {
@@ -12,7 +23,6 @@ pipeline {
               }
             }
        }
-  }
       stage('Test Maven - JUnit') {
             steps {
               withMaven(maven: 'maven') {
@@ -45,3 +55,4 @@ pipeline {
             }
        }
      }
+}
