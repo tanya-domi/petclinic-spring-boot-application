@@ -4,7 +4,7 @@ pipeline {
   Java_Home = tool name: 'java-17', type: 'jdk'
   }
   stages {
-      stage('snyk scan') {
+//       stage('snyk scan') {
 //                   steps {
 //                       snykSecurity(
 //                           snykInstallation: 'snyk@latest',
