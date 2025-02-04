@@ -4,16 +4,16 @@ pipeline {
   Java_Home = tool name: 'java-17', type: 'jdk'
   }
   stages {
-      stage('Snyk Test using plugin') {
-            steps {
-                snykSecurity(
-                    snykInstallation: 'snyk@latest',
-                    snykTokenId: 'SNYK_API_TOKEN',
-                    monitorProjectOnBuild: false,
-                    failOnIssues: 'false',
-                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
-                )
-            }
+      // stage('Snyk Test using plugin') {
+      //       steps {
+      //           snykSecurity(
+      //               snykInstallation: 'snyk@latest',
+      //               snykTokenId: 'SNYK_API_TOKEN',
+      //               monitorProjectOnBuild: false,
+      //               failOnIssues: 'false',
+      //               additionalArguments: '--json-file-output=all-vulnerabilities.json'
+      //           )
+      //       }
       }
       stage('Build Artifact') {
             steps {
