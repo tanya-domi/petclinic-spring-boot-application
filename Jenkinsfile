@@ -8,7 +8,7 @@ pipeline {
             steps {
                 snykSecurity(
                     snykInstallation: 'snyk@latest',
-                    snykTokenId: 'snyk_api_token',
+                    snykTokenId: 'SNYK_API_TOKEN',
                     monitorProjectOnBuild: false,
                     failOnIssues: 'false',
                     additionalArguments: '--json-file-output=all-vulnerabilities.json'
