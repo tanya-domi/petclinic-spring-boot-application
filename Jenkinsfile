@@ -4,8 +4,7 @@ pipeline {
       tools {
         maven 'maven3'
       }
-
-    stages {
+      stages {
         stage('snyk scan') {
             steps {
                 snykSecurity(
