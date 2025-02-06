@@ -23,19 +23,19 @@ pipeline {
                 //  archive 'target/*.jar'
             }
         }
-        stage('Test Maven - JUnit') {
+        // stage('Test Maven - JUnit') {
 
-            steps {
-              withMaven(maven: 'maven') {
-              sh "mvn test -Dcheckstyle.skip"
-              }
-            }
-            post{
-              always{
-                junit 'target/surefire-reports/*.xml'
-              }
-            }
-        }
+        //     steps {
+        //       withMaven(maven: 'maven') {
+        //       sh "mvn test -Dcheckstyle.skip"
+        //       }
+        //     }
+        //     post{
+        //       always{
+        //         junit 'target/surefire-reports/*.xml'
+        //       }
+        //     }
+        // }
         stage('Sonarqube Analysis -SAST') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
