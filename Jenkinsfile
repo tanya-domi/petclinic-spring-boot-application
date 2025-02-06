@@ -1,29 +1,30 @@
 pipeline {
-  agent any
-  environment {
-  Java_Home = tool name: 'java-17', type: 'jdk'
-  }
-  stages {
-      stage('Snyk Test using plugin') 
+    agent any
+  
+      tools {
+        maven 'maven3'
+      }
+
+    stages {
+        stage('snyk scan') {
             steps {
                 snykSecurity(
                     snykInstallation: 'snyk@latest',
                     snykTokenId: 'SNYK_API_TOKEN',
                     monitorProjectOnBuild: false,
-                    failOnIssues: 'false',
+                    failOnIssues: false,  // Use boolean for failOnIssues
                     additionalArguments: '--json-file-output=all-vulnerabilities.json'
                 )
             }
-      }
-      stage('Build Artifact') {
+        }
+
+        stage('maven build artifact') {
             steps {
-              withMaven(maven: 'maven') {
-              sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"
-              archive 'target/*.jar'
-              }
+                 sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"  // Correct capitalization for -DskipTests
+                 archive 'target/*.jar'
             }
-       }
-      stage('Test Maven - JUnit') {
+        }
+        stage('Test Maven - JUnit') {
 
             steps {
               withMaven(maven: 'maven') {
@@ -36,7 +37,7 @@ pipeline {
               }
             }
         }
-       stage('Sonarqube Analysis - SAST') {
+        stage('Sonarqube Analysis - SAST') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
                 withMaven(maven: 'maven'){
@@ -45,14 +46,22 @@ pipeline {
                 }
               }
         }
-        stage('Docker Image creation') {
+
+        
+        stage('building a docker image') {
             steps {
-              withDockerRegistry(credentialsId: 'dockercred', url: '') {
-              sh "docker build -t petclinic_img ."
-	      sh "docker tag petclinic_img:latest tds81/images:petclinic_img"
-              sh "docker push tds81/images:petclinic_img"
-                sh "docker run -d -p 8080:8080 petclinic_img"
-              }
+                sh "docker build -t tds81/petapp:${BUILD_NUMBER} ."
             }
-       }
-     }
+        }
+
+
+        stage('docker image push') {
+            steps {
+                withDockerRegistry(credentialsId: 'dockercred', url: '') {
+                    sh "docker push tds81/petapp:${BUILD_NUMBER}"
+                }
+            }
+        }
+        
+    }
+}
