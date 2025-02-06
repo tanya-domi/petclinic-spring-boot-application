@@ -36,10 +36,9 @@ pipeline {
         //       }
         //     }
         // }
-        stage('Sonarqube Analysis - SAST') {
+        stage('Sonarqube Analysis -SAST') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
-                withMaven(maven: 'maven'){
                 sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip"
                 }
                 }
