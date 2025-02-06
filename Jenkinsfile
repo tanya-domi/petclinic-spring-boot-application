@@ -4,7 +4,7 @@ pipeline {
   Java_Home = tool name: 'java-17', type: 'jdk'
   }
   stages {
-      stage('Snyk Test using plugin') {
+      stage('Snyk Test using plugin') 
             steps {
                 snykSecurity(
                     snykInstallation: 'snyk@latest',
@@ -15,7 +15,7 @@ pipeline {
                 )
             }
       }
-      stage('Build Artifact') 
+      stage('Build Artifact') {
             steps {
               withMaven(maven: 'maven') {
               sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"
@@ -24,6 +24,7 @@ pipeline {
             }
        }
       stage('Test Maven - JUnit') {
+
             steps {
               withMaven(maven: 'maven') {
               sh "mvn test -Dcheckstyle.skip"
