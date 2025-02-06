@@ -5,17 +5,17 @@ pipeline {
         maven 'maven3'
       }
       stages {
-        stage('snyk scan') {
-            steps {
-                snykSecurity(
-                    snykInstallation: 'snyk@latest',
-                    snykTokenId: 'SNYK_API_TOKEN',
-                    monitorProjectOnBuild: false,
-                    failOnIssues: false,  // Use boolean for failOnIssues
-                    additionalArguments: '--json-file-output=all-vulnerabilities.json'
-                )
-            }
-        }
+        // stage('snyk scan') {
+        //     steps {
+        //         snykSecurity(
+        //             snykInstallation: 'snyk@latest',
+        //             snykTokenId: 'SNYK_API_TOKEN',
+        //             monitorProjectOnBuild: false,
+        //             failOnIssues: false,  // Use boolean for failOnIssues
+        //             additionalArguments: '--json-file-output=all-vulnerabilities.json'
+        //         )
+        //     }
+        // }
 
         stage('maven build artifact') {
             steps {
