@@ -15,7 +15,7 @@ pipeline {
                 )
             }
       }
-      stage('Build Artifact') {
+      stage('Build Artifact') 
             steps {
               withMaven(maven: 'maven') {
               sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"
@@ -55,4 +55,3 @@ pipeline {
             }
        }
      }
-}
