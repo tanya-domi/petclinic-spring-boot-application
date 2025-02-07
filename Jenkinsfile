@@ -1,6 +1,6 @@
 pipeline {
     agent any
-     environment {
+         environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
   
@@ -26,7 +26,6 @@ pipeline {
                 //  archive 'target/*.jar'
             }
         }
-
         // stage('Test Maven - JUnit') {
 
         //     steps {
@@ -39,14 +38,14 @@ pipeline {
         //         junit 'target/surefire-reports/*.xml'
         //       }
         //     }
-        }
-        stage('Sonarqube Analysis -SAST') {
-            steps {
-                withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip"
-                }
-              }
-        }
+        // }
+        // stage('Sonarqube Analysis -SAST') {
+        //     steps {
+        //         withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
+        //         sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip"
+        //         }
+        //       }
+        // }
 
         
         stage('building a docker image') {
@@ -54,18 +53,17 @@ pipeline {
                 sh "docker build -t dts81/petclinic-app:${BUILD_NUMBER} ."
             }
         }
-         stage('docker image push') {
+
+
+        stage('docker image push') {
             steps {
-                withDockerRegistry(credentialsId: 'dockerhub-credentials', url: '') {
+                withDockerRegistry(credentialsId: 'dockercred', url: '') {
                     sh "docker push dts81/petclinic-app:${BUILD_NUMBER}"
                 }
             }
         }
-
+        
     }
+}
 
-
-
-
-
-
+ 
