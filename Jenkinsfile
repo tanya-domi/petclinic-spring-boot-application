@@ -50,11 +50,6 @@ pipeline {
                 sh "docker build -t tds81/petapp:${BUILD_NUMBER} ."
             }
         }
-         stage('Dockerhub login') {
-            steps {
-                sh 'echo $DOCKER_PASSWORD |sudo docker login -u $DOCKER_USERNAME --password-stdin'
-            }
-        }
 
 
         stage('docker image push') {
