@@ -25,28 +25,27 @@ pipeline {
                  sh "mvn clean package -DskipTests=true -Dcheckstyle.skip"  // Correct capitalization for -DskipTests
                 //  archive 'target/*.jar'
             }
-        }
+        // }
+        // stage('code analysis with sonarqube') {
 
-        stage('code analysis with sonarqube') {
-
-		      environment {
-            scannerHome = tool 'sonar-scanner-6'
-          }
-          steps {
-            withSonarQubeEnv('sonar-server') {
-              sh '''${scannerHome}/bin/sonar-scanner \
-                   -Dsonar.projectKey=spring-petclinic_part02 \
-                   -Dsonar.projectName=spring-petclinic_part02 \
-                   -Dsonar.projectVersion=1.0 \
-                   -Dsonar.sources=src/ \
-                //    -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
-                //    -Dsonar.junit.reportsPath=target/surefire-reports/ \
-                //    -Dsonar.jacoco.reportsPath=target/jacoco.exec \
-                //    -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
-                   -Dsonar.organization=spring-petclinic_part02'''
-            }
-          }
-        }
+		    //   environment {
+        //     scannerHome = tool 'sonar-scanner-6'
+        //   }
+        //   steps {
+        //     withSonarQubeEnv('sonar-server') {
+        //       sh '''${scannerHome}/bin/sonar-scanner \
+        //            -Dsonar.projectKey=spring-petclinic_part02 \
+        //            -Dsonar.projectName=spring-petclinic_part02 \
+        //            -Dsonar.projectVersion=1.0 \
+        //            -Dsonar.sources=src/ \
+        //            -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+        //            -Dsonar.junit.reportsPath=target/surefire-reports/ \
+        //            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+        //            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
+        //            -Dsonar.organization=spring-petclinic_part02'''
+        //     }
+        //   }
+        // }
         // stage('Test Maven - JUnit') {
 
         //     steps {
