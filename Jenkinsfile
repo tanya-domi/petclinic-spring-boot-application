@@ -50,15 +50,28 @@ pipeline {
                 sh "docker build -t tds81/petapp:${BUILD_NUMBER} ."
             }
         }
-
-
-        stage('docker image push') {
+        stage ('Push to dockerhub') {
             steps {
-                withDockerRegistry(credentialsId: 'dockercred', url: '') {
-                    sh "docker push tds81/petapp:${BUILD_NUMBER}"
+                script {
+                    echo 'Pushing to dockerhub'
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                            sh "echo $PASS | docker login -u $USER --password-stdin"
+                            sh "docker push tds81/petapp:${BUILD_NUMBER}"
+                      }
                 }
-            }
+            }  
         }
+
+        // stage('docker image push') {
+        //     steps {
+        //         withDockerRegistry(credentialsId: 'dockercred', url: '') {
+        //             sh "docker push tds81/petapp:${BUILD_NUMBER}"
+        //         }
+        //     }
+        // }
         
     }
 }
+
+
+
