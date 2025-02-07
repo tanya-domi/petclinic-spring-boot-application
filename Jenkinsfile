@@ -56,6 +56,7 @@ pipeline {
                     echo 'Pushing to dockerhub'
                     withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                             sh "echo $PASS | docker login -u $USER --password-stdin"
+                            sh "sudo docker tag petclinic-app:${BUILD_NUMBER} dts81/petclinic-app:${BUILD_NUMBER}"
                             sh "docker push tds81/petclinic-app:${BUILD_NUMBER}"
                       }
                 }
