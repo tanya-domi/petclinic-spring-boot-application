@@ -50,29 +50,28 @@ pipeline {
                 sh "docker build -t dts81/petclinic-app:${BUILD_NUMBER} ."
             }
         }
-        stage ('Push to dockerhub') {
+         stage('docker image push') {
             steps {
-                script {
-                    echo 'Pushing to dockerhub'
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh "echo $PASS | docker login -u $USER --password-stdin"
-                            sh "sudo docker tag petclinic-app:${BUILD_NUMBER} dts81/petclinic-app:${BUILD_NUMBER} --password-stdin"
-                            sh "docker push tds81/petclinic-app:${BUILD_NUMBER}"
-                      }
+                withDockerRegistry(credentialsId: 'dockerhub-credentials', url: '') {
+                    sh "docker push dts81/petclinic-app:${BUILD_NUMBER}"
                 }
-            }  
+            }
         }
-
-        // stage('docker image push') {
+        // stage ('Push to dockerhub') {
         //     steps {
-        //         withDockerRegistry(credentialsId: 'dockercred', url: '') {
-        //             sh "docker push dts81/petclinic-app:${BUILD_NUMBER}"
+        //         script {
+        //             echo 'Pushing to dockerhub'
+        //             withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+        //                     sh "echo $PASS | docker login -u $USER --password-stdin"
+        //                     sh "sudo docker tag petclinic-app:${BUILD_NUMBER} dts81/petclinic-app:${BUILD_NUMBER} --password-stdin"
+        //                     sh "docker push tds81/petclinic-app:${BUILD_NUMBER}"
+        //               }
         //         }
-        //     }
+        // //     }  
         // }
-        
     }
 }
+
 
 
 
