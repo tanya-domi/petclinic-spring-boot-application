@@ -39,7 +39,8 @@ pipeline {
         stage('Sonarqube Analysis -SAST') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarCloud', credentialsId: 'SONAR_TOKEN') {
-                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip"
+                sh "mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=spring-petclinic02 -Dcheckstyle.skip
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml"
                 }
               }
         }
