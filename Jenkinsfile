@@ -1,5 +1,8 @@
 pipeline {
     agent any
+     environment {
+        IMAGE_TAG = "${BUILD_NUMBER}"
+    }
   
       tools {
         maven 'maven3'
@@ -57,6 +60,7 @@ pipeline {
                 }
             }
         }
+
         // stage ('Push to dockerhub') {
         //     steps {
         //         script {
